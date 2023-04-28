@@ -25,11 +25,19 @@ It comes as a development of the previous version developed in php language:
 ### index "/"
 The main page shows the new updates and operations and Reports links.
 
+![التقاط الويب_28-4-2023_2210_127 0 0 1](https://user-images.githubusercontent.com/90055804/235243751-552842a2-8c57-40ff-955d-32a0f6306e96.jpeg)
+
+
+
 ### money_box "/money_box"
 A page displaying financial transactions arranged according to time, containing a column displaying the general balance after the transaction.
 
 ### Iron purchases "/iron_purchases" , Iron_ ales "/iron_sales"
 On the page responsible for entering iron purchases and sales, the quantity, date, price, and other additional information are added. The amount of the transaction is deducted from the general budget and recorded on the expenses or income page.
+
+![التقاط الويب_28-4-2023_2224_127 0 0 1](https://user-images.githubusercontent.com/90055804/235243891-e6745f32-eae1-4b4b-9894-51e4437083f9.jpeg)
+
+
 
 ### Income "/income"
 The page responsible for managing and displaying financial entries operations.It contains the feature of filtering by date, and preparing for printing.
@@ -48,6 +56,9 @@ The page responsible for managing and recording iron export operations.It contai
 
 ### Accounts "/accounts"
 The page responsible for displaying the accounts that are used to record all other operations, such as the accounts of vehicles that consume fuel, the accounts of customers who are suppliers for purchases, etc. When clicking on one of the accounts, a page appears showing all the transactions that were registered under the name of this account.It contains the feature of filtering by date, and preparing for printing.
+
+![التقاط الويب_28-4-2023_22334_127 0 0 1](https://user-images.githubusercontent.com/90055804/235243847-e3b5ca14-3527-4bfc-90f4-07295df9df8a.jpeg)
+
 
 ## Reports pages :
 
