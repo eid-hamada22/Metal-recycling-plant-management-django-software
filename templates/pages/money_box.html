@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+
+{% endblock css %}
+
+{% block body %}
+<div class="modal fade" id="pr"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <form method="GET" action="{% url 'money_box_print' %}">
+        <div class="modal-dialog ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">طباعة متقدمة</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    
+                    
+                    <div style="float: right;">: من تاريخ</div>
+                    <div class="form-group">
+                        <input type="date"required dir="rtl" class="form-control" name="fdate"   style="float: right;">
+                    </div>
+
+                    <div style="float: right;">: الى تاريخ</div>
+                    <div class="form-group">
+                        <input type="date"required dir="rtl" class="form-control" name="tdate"   style="float: right;">
+                    </div>
+                    {% comment %} <div style="float: right;">: طباعة</div>
+                    <div class="form-group">
+                        <select required dir="rtl" class="form-control" name="wtprint"   style="float: right;">
+                            <option value="1" selected>جميع المصروفات</option>
+                            <option value="2">المصروفات بدون حديد</option>
+                            <option value="3">مصروفات الحديد فقط</option>
+                        </select>
+                    </div> {% endcomment %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">الغاء</button>
+                    <button type="submit" class="btn btn-primary" name="add">طباعة</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="p4">
+    <div class="uper">
+        <div class="models sp">
+        <h1 style="" class="hme">حركات الصندوق</h1>
+        <a href="{% url 'money_box_print' %}" class="btn btn-primary ds">طباعة</a>
+
+        </div>
+
+    </div>
+    {% comment %} <a href="{% url 'money_box_print' %}?office=foobar" class="btn btn-primary ds">طباعة متقدمة</a> {% endcomment %}
+    <div style=" font-size: x-large;"><button type="button" class="btn btn-primary ds" data-bs-toggle="modal" data-bs-target="#pr">طباعة متقدمة</button></div>
+
+    <br>
+
+
+
+
+    <table class="table table-hover" style="width: 100%; margin-top: 0px;">
+        <thead>
+            <tr>
+              <th style="width: 15%;"><center>الصندوق</center></th>
+              <th style="width: 15%;"><center>التاريخ</center></th>
+              <th style="width: 15%;"><center>البيان</center></th>
+              <th style="width: 15%;"><center>الحساب</center></th>
+              <th style="width: 15%;"><center>الصرف</center></th>
+              <th style="width: 15%;"><center>الادخال</center></th>
+              <th style="width: 10%;"><center>الرقم</center></th>
+            </tr>
+          </thead>
+        <tbody id="output1" style="width: 100%;">
+            {% for item in all_money_box %}
+                        <tr dir="rtl"
+                        {% if item.expenses_id.price %}
+                        style="background-color: #f5f5f5;"
+                        {% endif %}
+                        > 
+                            <td style=" text-align:center; width: 15%;">{{item.box}}</td>
+                            {% if item.expenses_id.price %}
+                            <td style=" text-align:center; width: 15%;">{{item.expenses_id.date|date:"m-d"}}</td>
+
+                                {% if item.expenses_id.bio %}
+                                    <td style=" text-align:center; width: 15%;">{{item.expenses_id.bio}}</td>
+                                {% else %}
+                                    <td style=" text-align:center; width: 15%;"></td>
+                                {% endif %}
+                                <td style=" text-align:center; width: 15%;">{{item.expenses_id.account}}</td>
+                            {% else %}
+                            <td style=" text-align:center; width: 15%;">{{item.income_id.date|date:"m-d"}}</td>
+
+                            {% if item.income_id.notes %}
+                                <td style=" text-align:center; width: 15%;">{{item.income_id.notes}}</td>
+                            {% else %}
+                                <td style=" text-align:center; width: 15%;"></td>
+                            {% endif %}
+                            <td style=" text-align:center; width: 15%;">{{item.income_id.account}}</td>
+
+                            {% endif %}
+                            <td style=" text-align:center; width: 15%;">{{item.expenses_id.price}}</td>
+                            <td style=" text-align:center; width: 15%;">{{item.income_id.price}}</td>
+                            <td style=" text-align:center; width: 10%;">{{item.id}}</td>
+                        </tr>         
+            {% endfor %}
+
+        </tbody>
+    </table>
+
+
+
+
+ 
+</div>
+
+{% endblock body %}

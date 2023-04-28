@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+
+{% endblock css %}
+
+{% block body %}
+<div class="p4">
+    <div class="modal fade" id="name"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <form method="post">
+            {% csrf_token %}
+            <div class="modal-dialog ">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">اضافة عملية وزن</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        
+
+                        <div style="float: right;">: المبلغ</div>
+                        <div class="form-group">
+                            <input type="number" dir="rtl" placeholder="المبلغ المدفوع" required class="form-control" name="price"  style="float: right;">
+                        </div>
+                        
+                        <div style="float: right;">: التاريخ</div>
+                        <div class="form-group">
+                            <input type="date"required dir="rtl" class="form-control" name="date" value="{{today|date:"Y-m-d"}}"  style="float: right;">
+                        </div>
+
+                        <div style="float: right;">: ملاحظات</div>
+                        <div class="form-group">
+                            <input type="text" dir="rtl"placeholder="ملاحظات" class="form-control" name="notes"  style="float: right;">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">الغاء</button>
+                        <button type="submit" class="btn btn-primary" name="add">اضافة</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="uper">
+        <div class="models sp">
+        <h1 style="" class="hme">ادخلات الميزان</h1>
+        <div style=" font-size: x-large;"><button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#name">اضافة عملية ادخال</button></div>
+        </div>
+
+    </div>
+    <br>
+
+
+    <form  method="post" class="models">
+        <div class="input-group  ds" style="width: 30% !important;">
+          <button class="btn btn-outline-secondary"name="dt" id="button-addon1">تصفية</button>
+          <input type="date" required class="form-control"name="dataas"  placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1"value="<?php echo $_GET['date'];?>">
+        </div>
+    </form>
+    <table class="table table-hover" style="width: 100%; margin-top: 50px;">
+        <thead>
+            <tr>
+              <th style="width: 20%;"><center>التاريخ</center></th>
+              <th style="width: 15%;"><center>المبلغ</center></th>
+              <th style="width: 10%;"><center>الرقم</center></th>
+            </tr>
+          </thead>
+        <tbody id="output1" style="width: 100%;">
+            {% for item in weight_gain %}
+
+                            <tr dir="rtl"> 
+                                <td style=" text-align:center; width: 20%;">{{item.date|date:"m-d"}}</td>
+                                <td style=" text-align:center; width: 15%;">{{item.price}}</td>
+                                <td style=" text-align:center; width: 10%;">{{item.id}}</td>
+                            </tr>   
+            {% endfor %}
+
+        </tbody>
+      </table>
+
+      <table class="table table-hover tp" style="margin-top: 100px;">
+
+        <tbody id="output1" style="width: 100%;">
+
+
+  <td style="width: 30%; text-align:center;">مجموع العائد : {{week_weight_gain}} شيكل </td>
+
+                </tr>
+            </tbody>
+      </table>
+    <br>
+
+
+</div>
+
+{% endblock body %}

@@ -1,0 +1,96 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<link
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+  rel="stylesheet"
+/>
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css"
+/>
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+/>
+<link
+  href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css"
+  rel="stylesheet"
+/>
+<title>النظام الاداري | {{title}}</title>
+<table class="table table-hover" style="width: 100%; margin-top: 0px;">
+    <thead>
+        <tr>
+          <th style="width: 15%;"><center>التاريخ</center></th>
+          <th style="width: 15%;"><center>الصندوق</center></th>
+          <th style="width: 15%;"><center>البيان</center></th>
+          <th style="width: 15%;"><center>الحساب</center></th>
+          <th style="width: 15%;"><center>الصرف</center></th>
+          <th style="width: 15%;"><center>الادخال</center></th>
+          <th style="width: 10%;"><center>الرقم</center></th>
+        </tr>
+      </thead>
+      <tbody id="output1" style="width: 100%;">
+        {% for item in all_money_box %}
+                    <tr dir="rtl"
+                    {% if item.expenses_id.price %}
+                    style="background-color: #f5f5f5;"
+                    {% endif %}
+                    > 
+                        <td style=" text-align:center; width: 15%;">{{item.box}}</td>
+                        {% if item.expenses_id.price %}
+                        <td style=" text-align:center; width: 15%;">{{item.expenses_id.date|date:"m-d"}}</td>
+
+                            {% if item.expenses_id.bio %}
+                                <td style=" text-align:center; width: 15%;">{{item.expenses_id.bio}}</td>
+                            {% else %}
+                                <td style=" text-align:center; width: 15%;"></td>
+                            {% endif %}
+                            <td style=" text-align:center; width: 15%;">{{item.expenses_id.account}}</td>
+                        {% else %}
+                        <td style=" text-align:center; width: 15%;">{{item.income_id.date|date:"m-d"}}</td>
+
+                        {% if item.income_id.notes %}
+                            <td style=" text-align:center; width: 15%;">{{item.income_id.notes}}</td>
+                        {% else %}
+                            <td style=" text-align:center; width: 15%;"></td>
+                        {% endif %}
+                        <td style=" text-align:center; width: 15%;">{{item.income_id.account}}</td>
+
+                        {% endif %}
+                        <td style=" text-align:center; width: 15%;">{{item.expenses_id.price}}</td>
+                        <td style=" text-align:center; width: 15%;">{{item.income_id.price}}</td>
+                        <td style=" text-align:center; width: 10%;">{{item.id}}</td>
+                    </tr>         
+        {% endfor %}
+
+    </tbody>
+</table>
+
+<style>
+    body{
+        width: 100%;
+        padding: 0;
+    }
+  .ds {
+    display: none;
+  }
+  .tp {
+    width: 100%;
+    margin-top: 0px;
+  }
+  table {
+    border-collapse: collapse;
+  }
+
+  table,
+  tbody {
+    border: 1px solid black;
+  }
+  td {
+    border: 1px solid black;
+  }
+  td {
+    height: min-content;
+  }
+</style>

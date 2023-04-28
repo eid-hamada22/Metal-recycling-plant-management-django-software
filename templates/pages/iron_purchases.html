@@ -1,0 +1,294 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+
+{% endblock css %}
+
+{% block body %}
+<div class="p4">
+    <div class="modal fade" id="name"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <form method="post">
+            {% csrf_token %}
+            <div class="modal-dialog ">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">اضافة عملية شراء حديد</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        
+                        <div style="float: right;">: الكمية</div>
+                        <div class="form-group">
+                            <input type="number" dir="rtl" placeholder="وزن الحديد بالكيلو غرام" required class="form-control" name="quantity"  style="float: right;">
+                        </div>
+
+                        <div style="float: right;">: سعر البيع (التسعير)</div>
+                        <div class="form-group">
+                            <input type="number" dir="rtl" step="0.01" value="0.4" placeholder="سعر الكيلو الواحد" required class="form-control" name="pricing"  style="float: right;">
+                        </div>
+
+                        <div style="float: right;">: المبلغ</div>
+                        <div class="form-group">
+                            <input type="number" dir="rtl" placeholder="المبلغ المدفوع" required class="form-control" name="price"  style="float: right;">
+                        </div>
+                        
+                        <div style="float: right;">: التاريخ</div>
+                        <div class="form-group">
+                            <input type="date"required dir="rtl" class="form-control" name="date" value="{{today|date:"Y-m-d"}}"  style="float: right;">
+                        </div>
+
+                        <div style="float: right;">: ملاحظات</div>
+                        <div class="form-group">
+                            <input type="text" dir="rtl"placeholder="ملاحظات" class="form-control" name="notes"  style="float: right;">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">الغاء</button>
+                        <button type="submit" class="btn btn-primary" name="add">اضافة</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal fade" id="pr"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <form method="GET" action="{% url 'iron_purchases_print' %}">
+            <div class="modal-dialog ">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">طباعة متقدمة</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        
+                        
+                        <div style="float: right;">: من تاريخ</div>
+                        <div class="form-group">
+                            <input type="date"required dir="rtl" class="form-control" name="fdate"   style="float: right;">
+                        </div>
+    
+                        <div style="float: right;">: الى تاريخ</div>
+                        <div class="form-group">
+                            <input type="date"required dir="rtl" class="form-control" name="tdate"   style="float: right;">
+                        </div>
+                        {% comment %} <div style="float: right;">: طباعة</div>
+                        <div class="form-group">
+                            <select required dir="rtl" class="form-control" name="wtprint"   style="float: right;">
+                                <option value="1" selected>جميع المصروفات</option>
+                                <option value="2">المصروفات بدون حديد</option>
+                                <option value="3">مصروفات الحديد فقط</option>
+                            </select>
+                        </div> {% endcomment %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">الغاء</button>
+                        <button type="submit" class="btn btn-primary" name="add">طباعة</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="uper">
+        <div class="models sp">
+        <h1 style="" class="hme">مشتريات الحديد</h1>
+        <div style=" font-size: x-large;"><button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#name">اضافة عملية شراء جديدة</button></div>
+        </div>
+
+    </div>
+    <br>
+
+
+    <form  method="GET" class="models">
+        <div class="input-group  ds" style="width: 30% !important;">
+          <button type="submit" class="btn btn-outline-secondary"name="dt" id="button-addon1">تصفية</button>
+          <input type="date" required class="form-control"name="data_as"  placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1"value="{{data_as}}">
+        </div>
+        <a href="{% url 'iron_purchases_print' %}" class="btn btn-primary ds">طباعة</a>
+    </form>
+    <div style=" font-size: x-large;"><button type="button" class="btn btn-primary ds" data-bs-toggle="modal" data-bs-target="#pr">طباعة متقدمة</button></div>
+
+    {% if  day_iron_purchases %}
+    <div class="models sp">
+        <h5 style="margin-top: 50px;" class="hme" >مشتريات الحديد لتاريخ {{data_as}}</h5>
+    </div>
+    <table class="table table-hover" style="width: 100%; margin-top: 0px;">
+        <thead>
+            <tr>
+              {% comment %} <th style="width: 20%;"><center>ملاحظات</center></th> {% endcomment %}
+              <th style="width: 20%;"><center>التاريخ</center></th>
+              <th style="width: 15%;"><center>المبلغ</center></th>
+              <th style="width: 15%;"><center>التسعير</center></th>
+              <th style="width: 15%;"><center> الكمية</center></th>
+              <th style="width: 10%;"><center>الرقم</center></th>
+
+
+
+            </tr>
+          </thead>
+        <tbody id="output1" style="width: 100%;">
+            {% for item in day_iron_purchases %}
+
+                            <tr dir="rtl"> 
+                            {% comment %} <td style=" text-align:center;width: 20%;">{{notes}}</td> {% endcomment %}
+                            <td style=" text-align:center; width: 20%;">{{item.date|date:"m-d"}}</td>
+                            <td style=" text-align:center; width: 15%;">{{item.price}}</td>
+                            <td style=" text-align:center; width: 15%;">{{item.pricing}}</td>
+                            <td style=" text-align:center; width: 15%;">{{item.quantity}}</td>
+                            <td style=" text-align:center; width: 10%;">{{item.id}}</td>
+                            </tr>      
+            {% endfor %}        
+        </tbody>
+    </table>
+
+    <table class="table table-hover tp" style="margin-top: 50px;">
+
+            <tbody id="output1" style="width: 100%;">
+
+                <tr>
+                    <td style="width: 30%; text-align:center;">تكاليف الشراء : {{day_iron_purchases_price}} شيكل </td>
+                    <td style="width: 30%; text-align:center;">كامل التسعير : {{day_pricing|floatformat:2}}  </td>
+                    <td style="width: 40%; text-align:center;">الكمية المشترية : {{day_iron_purchases_quantity}} كيلو </td>
+                </tr>
+            </tbody>
+    </table>
+    <br>
+    
+    {% endif %}
+    <div class="models sp">
+        <h5 style="margin-top: 50px;" class="hme" >مشتريات الحديد الاسبوع الحالي</h5>
+    </div>
+    <table class="table table-hover" style="width: 100%; margin-top: 0px;">
+        <thead>
+            <tr>
+              {% comment %} <th style="width: 20%;"><center>ملاحظات</center></th> {% endcomment %}
+              <th style="width: 20%;"><center>التاريخ</center></th>
+              <th style="width: 15%;"><center>المبلغ</center></th>
+              <th style="width: 15%;"><center>التسعير</center></th>
+              <th style="width: 15%;"><center> الكمية</center></th>
+              <th style="width: 10%;"><center>الرقم</center></th>
+
+
+
+            </tr>
+          </thead>
+        <tbody id="output1" style="width: 100%;">
+            {% for item in week_iron_purchases %}
+
+                            <tr dir="rtl"> 
+                            {% comment %} <td style=" text-align:center;width: 20%;">{{notes}}</td> {% endcomment %}
+                            <td style=" text-align:center; width: 20%;">{{item.date|date:"m-d"}}</td>
+                            <td style=" text-align:center; width: 15%;">{{item.price}}</td>
+                            <td style=" text-align:center; width: 15%;">{{item.pricing}}</td>
+                            <td style=" text-align:center; width: 15%;">{{item.quantity}}</td>
+                            <td style=" text-align:center; width: 10%;">{{item.id}}</td>
+                            </tr>      
+            {% endfor %}        
+        </tbody>
+    </table>
+
+    <table class="table table-hover tp" style="margin-top: 50px;">
+
+            <tbody id="output1" style="width: 100%;">
+
+                <tr>
+                    <td style="width: 30%; text-align:center;">تكاليف الشراء : {{week_iron_purchases_price}} شيكل </td>
+                    <td style="width: 30%; text-align:center;">كامل التسعير : {{pricing|floatformat:2}}  </td>
+                    <td style="width: 40%; text-align:center;">الكمية المشترية : {{week_iron_purchases_quantity}} كيلو </td>
+                </tr>
+            </tbody>
+    </table>
+    <br>
+
+    <div class="models sp">
+        <h5 style="margin-top: 50px;" class="hme" >مشتريات الحديد الاسبوع السابق</h5>
+    </div>
+    <table class="table table-hover" style="width: 100%; margin-top: 0px;">
+        <thead>
+            <tr>
+              {% comment %} <th style="width: 20%;"><center>ملاحظات</center></th> {% endcomment %}
+              <th style="width: 20%;"><center>التاريخ</center></th>
+              <th style="width: 15%;"><center>المبلغ</center></th>
+              <th style="width: 15%;"><center>التسعير</center></th>
+              <th style="width: 15%;"><center> الكمية</center></th>
+              <th style="width: 10%;"><center>الرقم</center></th>
+
+
+
+            </tr>
+          </thead>
+        <tbody id="output1" style="width: 100%;">
+            {% for item in last_week_iron_purchases %}
+
+                            <tr dir="rtl"> 
+                            {% comment %} <td style=" text-align:center;width: 20%;">{{notes}}</td> {% endcomment %}
+                            <td style=" text-align:center; width: 20%;">{{item.date|date:"m-d"}}</td>
+                            <td style=" text-align:center; width: 15%;">{{item.price}}</td>
+                            <td style=" text-align:center; width: 15%;">{{item.pricing}}</td>
+                            <td style=" text-align:center; width: 15%;">{{item.quantity}}</td>
+                            <td style=" text-align:center; width: 10%;">{{item.id}}</td>
+                            </tr>      
+            {% endfor %}        
+        </tbody>
+    </table>
+
+    <table class="table table-hover tp" style="margin-top: 50px;">
+
+            <tbody id="output1" style="width: 100%;">
+
+                <tr>
+                    <td style="width: 30%; text-align:center;">تكاليف الشراء : {{last_week_iron_purchases_price}} شيكل </td>
+                    <td style="width: 30%; text-align:center;">كامل التسعير : {{last_pricing|floatformat:2}}  </td>
+                    <td style="width: 40%; text-align:center;">الكمية المشترية : {{last_week_iron_purchases_quantity}} كيلو </td>
+                </tr>
+            </tbody>
+    </table>
+
+    <br>
+    
+    
+    <div class="models sp">
+        <h5 style="margin-top: 50px;" class="hme" >مشتريات الحديد للاسابيع السابقة </h5>
+    </div>
+    <table class="table table-hover" style="width: 100%; margin-top: 0px;">
+        <thead>
+            <tr>
+              {% comment %} <th style="width: 20%;"><center>ملاحظات</center></th> {% endcomment %}
+              <th style="width: 20%;"><center>التاريخ</center></th>
+              <th style="width: 15%;"><center>المبلغ</center></th>
+              <th style="width: 15%;"><center>التسعير</center></th>
+              <th style="width: 15%;"><center> الكمية</center></th>
+              <th style="width: 10%;"><center>الرقم</center></th>
+
+
+
+            </tr>
+          </thead>
+        <tbody id="output1" style="width: 100%;">
+            {% for item in all_last_week_iron_purchases %}
+
+                            <tr dir="rtl"> 
+                            {% comment %} <td style=" text-align:center;width: 20%;">{{notes}}</td> {% endcomment %}
+                            <td style=" text-align:center; width: 20%;">{{item.date|date:"m-d"}}</td>
+                            <td style=" text-align:center; width: 15%;">{{item.price}}</td>
+                            <td style=" text-align:center; width: 15%;">{{item.pricing}}</td>
+                            <td style=" text-align:center; width: 15%;">{{item.quantity}}</td>
+                            <td style=" text-align:center; width: 10%;">{{item.id}}</td>
+                            </tr>      
+            {% endfor %}        
+        </tbody>
+    </table>
+
+    <table class="table table-hover tp" style="margin-top: 50px;">
+
+            <tbody id="output1" style="width: 100%;">
+
+                <tr>
+                    <td style="width: 30%; text-align:center;">تكاليف الشراء : {{all_last_week_iron_purchases_price}} شيكل </td>
+                    <td style="width: 30%; text-align:center;">كامل التسعير : {{all_last_pricing|floatformat:2}}  </td>
+                    <td style="width: 40%; text-align:center;">الكمية المشترية : {{all_last_week_iron_purchases_quantity}} كيلو </td>
+                </tr>
+            </tbody>
+    </table>
+</div>
+
+{% endblock body %}

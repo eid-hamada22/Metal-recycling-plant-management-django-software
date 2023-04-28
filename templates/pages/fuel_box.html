@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+
+{% endblock css %}
+
+{% block body %}
+<div class="p4">
+    <div class="uper">
+        <div class="models sp">
+        <h1 style="" class="hme">حركات مخزن الوقود</h1>
+        <a href="{% url 'fuel_box_print' %}" class="btn btn-primary ds">طباعة</a>
+
+        </div>
+
+    </div>
+    <br>
+
+
+
+
+    <table class="table table-hover" style="width: 100%; margin-top: 0px;">
+        <thead>
+            <tr>
+              <th style="width: 15%;"><center>المخزون</center></th>
+              <th style="width: 15%;"><center>التاريخ</center></th>
+              <th style="width: 15%;"><center>الجهة</center></th>
+              <th style="width: 15%;"><center>الصرف</center></th>
+              <th style="width: 15%;"><center>الادخال</center></th>
+              <th style="width: 10%;"><center>الرقم</center></th>
+            </tr>
+          </thead>
+        <tbody id="output1" style="width: 100%;">
+            {% for item in all_fuel_box %}
+                        <tr dir="rtl"
+                        {% if item.fuel_id.quantity %}
+                        style="background-color: #f5f5f5;"
+                        {% endif %}
+                        > 
+                            <td style=" text-align:center; width: 15%;">{{item.box}}</td>
+                            <td style=" text-align:center; width: 15%;">{{item.date|date:"m-d"}}</td>
+                            {% if item.fuel_id.quantity %}
+                                <td style=" text-align:center; width: 15%;">{{item.fuel_id.account}}</td>
+                            {% else %}
+                            <td style=" text-align:center; width: 15%;">{{item.fuel_incom_id.account}}</td>
+
+                            {% endif %}
+                            <td style=" text-align:center; width: 15%;">{{item.fuel_id.quantity}}</td>
+                            <td style=" text-align:center; width: 15%;">{{item.fuel_incom_id.quantity}}</td>
+                            <td style=" text-align:center; width: 10%;">{{item.id}}</td>
+                        </tr>         
+            {% endfor %}
+
+        </tbody>
+    </table>
+
+
+
+
+ 
+</div>
+
+{% endblock body %}

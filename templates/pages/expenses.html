@@ -1,0 +1,375 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+
+{% endblock css %}
+
+{% block body %}
+<div class="p4">
+    <div class="modal fade" id="name"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <form method="post">
+            {% csrf_token %}
+            <div class="modal-dialog ">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">اضافة عملية صرف</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        
+                        <div style="float: right;">: المبلغ</div>
+                        <div class="form-group">
+                            <input type="number" dir="rtl" placeholder="المبلغ المصروف" required class="form-control" name="price"  style="float: right;">
+                        </div>
+
+                        <div style="float: right;">: الحساب</div>
+                        <div class="form-group">
+                        <select name="account" id="" dir="rtl" placeholder="الحساب التعبئة" required class="form-control"   style="float: right;">
+                            {% for item in expenses_accounts %}
+                              <option value="{{item.id}}">{{item.name}}</option>
+                            {% endfor %}
+                        </select>
+                        </div>
+
+                        <div style="float: right;">: البيان</div>
+                        <div class="form-group">
+                            <input type="text" dir="rtl" placeholder="البيان"  class="form-control" name="bio"  style="float: right;">
+                        </div>
+                        
+                        <div style="float: right;">: التاريخ</div>
+                        <div class="form-group">
+                            <input type="date"required dir="rtl" class="form-control" name="date" value="{{today|date:"Y-m-d"}}"  style="float: right;">
+                        </div>
+
+                        <div style="float: right;">: ملاحظات</div>
+                        <div class="form-group">
+                            <input type="text" dir="rtl"placeholder="ملاحظات" class="form-control" name="notes"  style="float: right;">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">الغاء</button>
+                        <button type="submit" class="btn btn-primary" name="add">اضافة</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal fade" id="pr"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <form method="GET" action="{% url 'expenses_print' %}">
+            <div class="modal-dialog ">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">طباعة متقدمة</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        
+                        
+                        <div style="float: right;">: من تاريخ</div>
+                        <div class="form-group">
+                            <input type="date"required dir="rtl" class="form-control" name="fdate"   style="float: right;">
+                        </div>
+    
+                        <div style="float: right;">: الى تاريخ</div>
+                        <div class="form-group">
+                            <input type="date"required dir="rtl" class="form-control" name="tdate"   style="float: right;">
+                        </div>
+                        <div style="float: right;">: طباعة</div>
+                        <div class="form-group">
+                            <select required dir="rtl" class="form-control" name="wtprint"   style="float: right;">
+                                <option value="1" selected>جميع المصروفات</option>
+                                <option value="2">المصروفات بدون حديد</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">الغاء</button>
+                        <button type="submit" class="btn btn-primary" name="add">طباعة</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="uper">
+        <div class="models sp">
+        <h1 style="" class="hme">المصروفات النقدية</h1>
+        <div style=" font-size: x-large;"><button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#name">اضافة عملية صرف جديدة</button></div>
+        </div>
+
+    </div>
+    <br>
+
+
+    <form  method="GET" class="models">
+        <div class="input-group  ds" style="width: 30% !important;">
+          <button class="btn btn-outline-secondary"name="dt" id="button-addon1">تصفية</button>
+          <input type="date" required class="form-control"name="data_as"  placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1"value="{{data_as}}">
+        </div>
+        <a href="{% url 'expenses_print' %}" class="btn btn-secondary ds " style="margin-right: 10px;" >طباعة </a>
+        <a href="{% url 'expenses_print_noiron' %}" class="btn btn-primary ds"style="margin-right: 10px;">طباعة بدون عمليات شراء الحديد</a>
+    </form>
+    <div style=" font-size: x-large;"><button type="button" class="btn btn-primary ds" data-bs-toggle="modal" data-bs-target="#pr">طباعة متقدمة</button></div>
+
+    {% if  day_expenses_all %}
+        <div class="models sp">
+            <h5 style="margin-top: 50px;" class="hme" >المصروفات لتاريخ {{data_as}}</h5>
+        </div>
+        <table class="table table-hover" style="width: 100%; margin-top: 0px;">
+            <thead>
+                <tr>
+                <th style="width: 20%;"><center>التاريخ</center></th>
+                <th style="width: 15%;"><center>البيان</center></th>
+                <th style="width: 15%;"><center>رقم العملية</center></th>
+                <th style="width: 15%;"><center>الحساب</center></th>
+                <th style="width: 15%;"><center>المبلغ</center></th>
+                <th style="width: 10%;"><center>الرقم</center></th>
+                </tr>
+            </thead>
+            <tbody id="output1" style="width: 100%;">
+                {% for item in day_expenses_all %}
+                            <tr dir="rtl"> 
+                                <td style=" text-align:center; width: 20%;">{{item.date|date:"m-d"}}</td>
+                                {% if item.bio %}
+                                    <td style=" text-align:center; width: 15%;">{{item.bio}}</td>
+                                {% else %}
+                                <td style=" text-align:center; width: 15%;"></td>
+                                {% endif %}
+
+                                {% if item.operation_id %}
+                                <td style=" text-align:center; width: 15%;     color: #0d6efd;cursor: pointer;"
+                                {% if item.account  %}
+                                onclick="myPopup ('{% url 'iron_purchases' item.operation_id %}', 'web', 1000, 160);"
+                                {% endif %}>
+                                {{item.operation_id}}</td>
+                                {% else %}
+                                <td style=" text-align:center; width: 15%;"></td>
+                                {% endif %}
+
+                                <td style=" text-align:center; width: 15%;">{{item.account}}</td>
+                                <td style=" text-align:center; width: 15%;">{{item.price}}</td>
+                                <td style=" text-align:center; width: 10%;">{{item.id}}</td>
+                            </tr>         
+                {% endfor %}
+
+            </tbody>
+        </table>
+
+        <table class="table table-hover tp" style="margin-top: 50px;">
+
+            <tbody id="output1" style="width: 100%;">
+                <tr>
+                    <td style="width: 30%; text-align:center;">المصروفات الاخرى : {{day_expenses_not_iron}} شيكل </td>
+                    <td style="width: 40%; text-align:center;">مصروفات شراء الحديد : {{day_expenses_iron}} شيكل </td>
+                </tr>
+            </tbody>
+        </table>
+        <br>
+        <table class="table table-hover tp" style="margin-top: 20px;">
+
+            <tbody id="output1" style="width: 100%;">
+                <tr>
+                    <td style="width: 30%; text-align:center;">مجموع المصروفات : {{day_expenses_all_price}} شيكل </td>
+                </tr>
+            </tbody>
+        </table>
+    {% endif %}
+
+    <div class="models sp">
+        <h5 style="margin-top: 50px;" class="hme" >مصروفات الاسبوع الحالي</h5>
+    </div>
+    <table class="table table-hover" style="width: 100%; margin-top: 0px;">
+        <thead>
+            <tr>
+              <th style="width: 20%;"><center>التاريخ</center></th>
+              <th style="width: 15%;"><center>البيان</center></th>
+              <th style="width: 15%;"><center>رقم العملية</center></th>
+              <th style="width: 15%;"><center>الحساب</center></th>
+              <th style="width: 15%;"><center>المبلغ</center></th>
+              <th style="width: 10%;"><center>الرقم</center></th>
+            </tr>
+          </thead>
+        <tbody id="output1" style="width: 100%;">
+            {% for item in week_expenses_all %}
+                        <tr dir="rtl"> 
+                            <td style=" text-align:center; width: 20%;">{{item.date|date:"m-d"}}</td>
+                            {% if item.bio %}
+                                <td style=" text-align:center; width: 15%;">{{item.bio}}</td>
+                            {% else %}
+                            <td style=" text-align:center; width: 15%;"></td>
+                            {% endif %}
+
+                            {% if item.operation_id %}
+                                <td style=" text-align:center; width: 15%;     color: #0d6efd;cursor: pointer;"
+                                {% if item.account  %}
+                                onclick="myPopup ('{% url 'iron_purchases' item.operation_id %}', 'web', 1000, 160);"
+                                {% endif %}>
+                                {{item.operation_id}}</td>
+                            {% else %}
+                            <td style=" text-align:center; width: 15%;"></td>
+                            {% endif %}
+
+                            <td style=" text-align:center; width: 15%;">{{item.account}}</td>
+                            <td style=" text-align:center; width: 15%;">{{item.price}}</td>
+                            <td style=" text-align:center; width: 10%;">{{item.id}}</td>
+                        </tr>         
+            {% endfor %}
+
+        </tbody>
+    </table>
+
+    <table class="table table-hover tp" style="margin-top: 50px;">
+
+        <tbody id="output1" style="width: 100%;">
+            <tr>
+                <td style="width: 30%; text-align:center;">المصروفات الاخرى : {{week_expenses_not_iron}} شيكل </td>
+                <td style="width: 40%; text-align:center;">مصروفات شراء الحديد : {{week_expenses_iron}} شيكل </td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+    <table class="table table-hover tp" style="margin-top: 20px;">
+
+        <tbody id="output1" style="width: 100%;">
+            <tr>
+                <td style="width: 30%; text-align:center;">المتبقي : {{bc}} شيكل </td>
+                <td style="width: 30%; text-align:center;">مجموع المصروفات : {{week_expenses_all_price}}  </td>
+                <td style="width: 40%; text-align:center;">مجموع المدخولات : {{week_income_all_price}} شيكل </td>
+            </tr>
+        </tbody>
+    </table>
+
+
+    <div class="models sp">
+        <h5 style="margin-top: 50px;" class="hme" >مصوفات الاسبوع السابق</h5>
+    </div>
+    <table class="table table-hover" style="width: 100%; margin-top: 0px;">
+        <thead>
+            <tr>
+              <th style="width: 20%;"><center>التاريخ</center></th>
+              <th style="width: 15%;"><center>البيان</center></th>
+              <th style="width: 15%;"><center>رقم العملية</center></th>
+              <th style="width: 15%;"><center>الحساب</center></th>
+              <th style="width: 15%;"><center>المبلغ</center></th>
+              <th style="width: 10%;"><center>الرقم</center></th>
+            </tr>
+          </thead>
+        <tbody id="output1" style="width: 100%;">
+            {% for item in last_week_expenses_all %}
+                        <tr dir="rtl"> 
+                            <td style=" text-align:center; width: 20%;">{{item.date|date:"m-d"}}</td>
+                            {% if item.bio %}
+                                <td style=" text-align:center; width: 15%;">{{item.bio}}</td>
+                            {% else %}
+                            <td style=" text-align:center; width: 15%;"></td>
+                            {% endif %}
+
+                            {% if item.operation_id %}
+                            <td style=" text-align:center; width: 15%;     color: #0d6efd;cursor: pointer;"
+                            {% if item.account  %}
+                            onclick="myPopup ('{% url 'iron_purchases' item.operation_id %}', 'web', 1000, 160);"
+                            {% endif %}>
+                            {{item.operation_id}}</td>
+                            {% else %}
+                            <td style=" text-align:center; width: 15%;"></td>
+                            {% endif %}
+
+                            <td style=" text-align:center; width: 15%;">{{item.account}}</td>
+                            <td style=" text-align:center; width: 15%;">{{item.price}}</td>
+                            <td style=" text-align:center; width: 10%;">{{item.id}}</td>
+                        </tr>         
+            {% endfor %}
+
+        </tbody>
+    </table>
+
+      <table class="table table-hover tp" style="margin-top: 50px;">
+
+        <tbody id="output1" style="width: 100%;">
+            <tr>
+                <td style="width: 30%; text-align:center;">تحويل الرصيد : {{last_week_expenses_transfer}} شيكل </td>
+                <td style="width: 30%; text-align:center;">المصروفات الاخرى : {{last_week_expenses_not_iron}} شيكل </td>
+                <td style="width: 40%; text-align:center;">مصروفات شراء الحديد : {{last_week_expenses_iron}} شيكل </td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+    <table class="table table-hover tp" style="margin-top: 20px;">
+
+        <tbody id="output1" style="width: 100%;">
+            <tr>
+                <td style="width: 30%; text-align:center;">مجموع المصروفات الاساسية : {{last_week_expenses_iron|add:last_week_expenses_not_iron}}  </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="models sp">
+        <h5 style="margin-top: 50px;" class="hme" >مصوفات الاسابيع السابقة</h5>
+    </div>
+    <table class="table table-hover" style="width: 100%; margin-top: 0px;">
+        <thead>
+            <tr>
+              <th style="width: 20%;"><center>التاريخ</center></th>
+              <th style="width: 15%;"><center>البيان</center></th>
+              <th style="width: 15%;"><center>رقم العملية</center></th>
+              <th style="width: 15%;"><center>الحساب</center></th>
+              <th style="width: 15%;"><center>المبلغ</center></th>
+              <th style="width: 10%;"><center>الرقم</center></th>
+            </tr>
+          </thead>
+        <tbody id="output1" style="width: 100%;">
+            {% for item in all_week_expenses_all %}
+                        <tr dir="rtl"> 
+                            <td style=" text-align:center; width: 20%;">{{item.date|date:"m-d"}}</td>
+                            {% if item.bio %}
+                                <td style=" text-align:center; width: 15%;">{{item.bio}}</td>
+                            {% else %}
+                            <td style=" text-align:center; width: 15%;"></td>
+                            {% endif %}
+
+                            {% if item.operation_id %}
+                            <td style=" text-align:center; width: 15%;     color: #0d6efd;cursor: pointer; "
+                            {% if item.account  %}
+                            onclick="myPopup ('{% url 'iron_purchases' item.operation_id %}', 'web', 1000, 160);"
+                            {% endif %}>
+                            {{item.operation_id}}</td>
+                            {% else %}
+                            <td style=" text-align:center; width: 15%;"></td>
+                            {% endif %}
+
+                            <td style=" text-align:center; width: 15%;">{{item.account}}</td>
+                            <td style=" text-align:center; width: 15%;">{{item.price}}</td>
+                            <td style=" text-align:center; width: 10%;">{{item.id}}</td>
+                        </tr>         
+            {% endfor %}
+
+        </tbody>
+    </table>
+
+    <table class="table table-hover tp" style="margin-top: 50px;">
+
+        <tbody id="output1" style="width: 100%;">
+            <tr>
+                <td style="width: 30%; text-align:center;">المصروفات الاخرى : {{all_week_expenses_not_iron}} شيكل </td>
+                <td style="width: 40%; text-align:center;">مصروفات شراء الحديد : {{all_week_expenses_iron}} شيكل </td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+    <table class="table table-hover tp" style="margin-top: 20px;">
+
+        <tbody id="output1" style="width: 100%;">
+            <tr>
+                <td style="width: 30%; text-align:center;">مجموع المصروفات : {{all_week_expenses_all_price}}  </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<script>
+    function myPopup(myURL, title, myWidth, myHeight) {
+        var left = (screen.width - myWidth) / 2;
+        var top = (screen.height - myHeight) / 3;
+        var myWindow = window.open(myURL, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=' + myWidth + ', height=' + myHeight + ', top=' + top + ', left=' + left);
+    }
+</script>
+{% endblock body %}

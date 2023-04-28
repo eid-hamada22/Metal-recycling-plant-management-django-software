@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+
+{% endblock css %}
+
+{% block body %}
+<div class="p4">
+    <div class="uper">
+        <h1 style="" class="hme">الصفحة الرئيسية</h1>
+    </div>
+
+    <br>
+    <div class="models" style="width:90%;">
+        <div class="card text-white bg-danger mb-3 p mode" style="">
+            <div class="card-header"><span style="float: right;"> انتاج المكابس (امس)</span></div>
+            <div class="card-body ">
+                <h5 class="card-title"><span style="float: right;">العدد  : <span> {{yes_pistons}} مشطاح</span> </span></h5>
+            </div>
+        </div>
+        <div class="card text-dark bg-warning mb-3 p mode" style="">
+            <div class="card-header"><span style="float: right;"> انتاج المكابس (من بداية الاسبوع)</span></div>
+            <div class="card-body ">
+                <h5 class="card-title"><span style="float: right;">العدد  : <span> {{week_pistons}} مشطاح</span> </span></h5>
+            </div>
+        </div>
+        <div class="card text-white bg-success mb-3 p mode" style="">
+            <div class="card-header"><span style="float: right;"> المشاطيح المتوفرة </span></div>
+            <div class="card-body ">
+                <h5 class="card-title"><span style="float: right;">العدد  : <span>0 مشطاح</span> </span></h5>
+            </div>
+        </div>
+
+
+
+        <div class="card text-white bg-primary mb-3 p mode" style="">
+            <div class="card-header"><span style="float: right;"> الحديد المشتري اليوم</span></div>
+            <div class="card-body ">
+                <h5 class="card-title"><span style="float: right;"> الكمية :{{today_iron_purchases}} كيلوغرام</span></h5>
+            </div>
+        </div>
+
+        <div class="card text-white bg-primary mb-3 p mode" style="">
+            <div class="card-header"><span style="float: right;"> الحديد المشتري امس</span></div>
+            <div class="card-body ">
+                <h5 class="card-title"><span style="float: right;"> الكمية :{{yes_iron_purchases}} كيلوغرام</span></h5>
+            </div>
+        </div>
+
+        <div class="card text-white bg-primary mb-3 p mode" style="">
+            <div class="card-header"><span style="float: right;"> الحديد المشتري منذ بداية الاسبوع</span></div>
+            <div class="card-body ">
+                <h5 class="card-title"><span style="float: right;"> الكمية :{{week_iron_purchases}} كيلوغرام</span></h5>
+            </div>
+        </div>
+
+        <div class="card text-dark bg-light mb-3 p mode" style="">
+            <div class="card-header"><span style="float: right;"> البنزين المتوفر</span></div>
+            <div class="card-body ">
+                <h5 class="card-title"><span style="float: right;"> الكمية: {{fuel}} لتر</span></h5>
+            </div>
+        </div>
+        <div class="card text-white bg-secondary mb-3 p mode" style="">
+            <div class="card-header"><span style="float: right;"> رصيد الصندوق الحالي</span></div>
+            <div class="card-body ">
+                <h5 class="card-title"><span style="float: right;"> الرصيد : {{money_still}} ش</span></h5>
+            </div>
+        </div>
+
+    </div>
+<div style="font-size: 25px;">:التقارير</div>
+<div class="models" style="width:90%;">
+
+<div class="card text-end mb-3 border-primary mode" >
+      <div class="card-header">التقرير المالي الاساسي</div>
+  <div class="card-body">
+
+    <p class="card-text">اطلع على جميع الايرادات والمصروفات من بداية الاسبوع حتى الان</p>
+    <a href="{% url 'week_sum' %}" class="btn btn-primary">مشاهدة التقرير</a>
+  </div>
+</div>
+<div class="card text-end mb-3 border-dark mode" >
+      <div class="card-header">التقرير الاسبوعي البياني</div>
+  <div class="card-body">
+
+    <p class="card-text">اطلع على جميع الايرادات والمصروفات  وانتاج المكابس وغيره من بداية الاسبوع </p>
+    <a href="{% url 'week_pyn' %}" class="btn btn-dark ">مشاهدة التقرير</a>
+  </div>
+</div>
+
+<div class="card text-end mb-3 border-success  mode " >
+      <div class="card-header">تقرير حركات الصندوق </div>
+  <div class="card-body">
+
+    <p class="card-text">اطلع على جميع حركات الادخال والاخراج بترتيبها التاريخي</p>
+    <a href="{% url 'money_box_print' %}" class="btn btn-success   ">مشاهدة التقرير</a>
+  </div>
+</div>
+
+<div class="card text-end mb-3 border-success  mode " >
+    <div class="card-header">تقرير استهلاك الوقود </div>
+    <div class="card-body">
+
+    <p class="card-text">اطلع على جميع حركات سحب الوقود وكمية سحب الاليات الموجودة</p>
+    <a href="{% url 'fuel_box_print' %}" class="btn btn-warning    ">مشاهدة التقرير</a>
+    </div>
+</div>
+
+
+<div class="card text-end mb-3 border-secondary  mode " >
+    <div class="card-header">تقرير شراء الحديد </div>
+    <div class="card-body">
+
+    <p class="card-text">اطلع على جميع حركات شراء الحديد منذ بداية الاسبوع</p>
+    <a href="{% url 'iron_purchases_print' %}" class="btn btn-secondary   ">مشاهدة التقرير</a>
+    </div>
+</div>
+
+    <div class="card text-end mb-3 border-secondary  mode " >
+        <div class="card-header">تقرير المصروفات الانتاجية </div>
+        <div class="card-body">
+    
+        <p class="card-text">اطلع على جميع حركات المصروفات الانتاجية منذ بداية الاسبوع</p>
+        <a href="{% url 'expenses_print_noiron' %}" class="btn btn-secondary   ">مشاهدة التقرير</a>
+        </div>
+</div>
+    
+</div>
+</div>
+
+{% endblock body %}
+

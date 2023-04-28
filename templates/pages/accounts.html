@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+
+{% endblock css %}
+
+{% block body %}
+<div class="p4">
+
+    <div class="uper">
+        <div class="models sp">
+        <h1 style="" class="hme">الحسابات</h1>
+        </div>
+
+    </div>
+    <br>
+
+
+
+    <table class="table table-hover" style="width: 100%; margin-top: 0px;">
+        <thead>
+            <tr>
+              <th style="width: 45%;"><center> طبيعة الاستخدام</center></th>
+              <th style="width: 45%;"><center> الاسم</center></th>
+              <th style="width: 10%;"><center>الرقم</center></th>
+
+
+
+            </tr>
+          </thead>
+        <tbody id="output1" style="width: 100%;">
+
+            {% for item in accounts %}
+            
+                            <tr dir="rtl" onclick="window.location.replace('{% url 'accounts' item.id %}');"> 
+                            <td style=" text-align:center; width: 45%;">
+                            {% for tag in item.use.all %}
+                                {{tag}}.
+                            {% endfor %}
+                        </td>
+                            <td style=" text-align:center; width: 45%;">{{item.name}}</td>
+                            <td style=" text-align:center; width: 10%;">{{item.id}}</td>
+                            </tr>            
+            {% endfor %}
+
+        </tbody>
+      </table>
+      <style>
+        tbody tr:nth-child(even) {
+            background-color: #f5f5f5;
+        }
+      </style>
+      {% endblock body %}
+      

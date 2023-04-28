@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+
+{% endblock css %}
+
+{% block body %}
+<div class="p4">
+    <div class="modal fade" id="name"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <form method="post">
+            {% csrf_token %}
+            <div class="modal-dialog ">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">اضافة عملية اخراج</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        
+                        <div style="float: right;">: الكمية</div>
+                        <div class="form-group">
+                            <input type="number" dir="rtl" placeholder="كمية الوقود الخارجة" required class="form-control" name="quantity"  style="float: right;">
+                        </div>
+
+                        <div style="float: right;">: الحساب</div>
+                        <div class="form-group">
+                        <select name="account" id="" dir="rtl" placeholder="الحساب التعبئة" required class="form-control"   style="float: right;">
+                            {% for item in fuel_accounts %}
+                              <option value="{{item.id}}">{{item.name}}</option>
+                            {% endfor %}
+                        </select>
+                        </div>
+
+                        
+                        <div style="float: right;">: التاريخ</div>
+                        <div class="form-group">
+                            <input type="date"required dir="rtl" class="form-control" name="date" value="{{today|date:"Y-m-d"}}"  style="float: right;">
+                        </div>
+
+                        <div style="float: right;">: ملاحظات</div>
+                        <div class="form-group">
+                            <input type="text" dir="rtl"placeholder="ملاحظات" class="form-control" name="notes"  style="float: right;">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">الغاء</button>
+                        <button type="submit" class="btn btn-primary" name="add">اضافة</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="uper">
+        <div class="models sp">
+        <h1 style="" class="hme">اخراج الوقود</h1>
+        <div style=" font-size: x-large;"><button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#name">اضافة عملية اخراج وقود</button></div>
+        </div>
+
+    </div>
+    <br>
+
+
+    <form  method="GET" class="models">
+        <div class="input-group  ds" style="width: 30% !important;">
+          <button class="btn btn-outline-secondary"name="dt" id="button-addon1">تصفية</button>
+          <input type="date" required class="form-control"name="data_as"  placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1"value="{{data_as}}">
+        </div>
+        <a href="{% url 'fuel_box' %}" class="btn btn-primary ds " style="margin-right: 10px;" >طباعة </a>
+
+    </form>
+    {% if  day_fuel %}
+    <div class="models sp">
+        <h5 style="margin-top: 50px;" class="hme" >اخراجات الوقود في تاريخ {{data_as}}</h5>
+    </div>
+    <table class="table table-hover" style="width: 100%; margin-top: 0px;">
+        <thead>
+            <tr>
+              <th style="width: 20%;"><center>التاريخ</center></th>
+              <th style="width: 15%;"><center>الحساب</center></th>
+              <th style="width: 15%;"><center> الكمية</center></th>
+              <th style="width: 10%;"><center>الرقم</center></th>
+            </tr>
+          </thead>
+        <tbody id="output1" style="width: 100%;">
+            {% for item in day_fuel %}
+
+                            <tr dir="rtl"> 
+                                <td style=" text-align:center; width: 20%;">{{item.date|date:"m-d"}}</td>
+                                <td style=" text-align:center; width: 15%;">{{item.account}}</td>
+                                <td style=" text-align:center; width: 15%;">{{item.quantity}}</td>
+                                <td style=" text-align:center; width: 10%;">{{item.id}}</td>
+                            </tr>              
+            {% endfor %}
+            
+        </tbody>
+    </table>
+    {% endif %}
+
+    <table class="table table-hover" style="width: 100%; margin-top: 50px;">
+        <thead>
+            <tr>
+              <th style="width: 20%;"><center>التاريخ</center></th>
+              <th style="width: 15%;"><center>الحساب</center></th>
+              <th style="width: 15%;"><center> الكمية</center></th>
+              <th style="width: 10%;"><center>الرقم</center></th>
+            </tr>
+          </thead>
+        <tbody id="output1" style="width: 100%;">
+            {% for item in fuel %}
+
+                            <tr dir="rtl"> 
+                                <td style=" text-align:center; width: 20%;">{{item.date|date:"m-d"}}</td>
+                                <td style=" text-align:center; width: 15%;">{{item.account}}</td>
+                                <td style=" text-align:center; width: 15%;">{{item.quantity}}</td>
+                                <td style=" text-align:center; width: 10%;">{{item.id}}</td>
+                            </tr>              
+            {% endfor %}
+            
+        </tbody>
+    </table>
+
+      <table class="table table-hover tp" style="margin-top: 100px;">
+
+        <tbody id="output1" style="width: 100%;">
+
+
+  <td style="width: 100%; text-align:center;">البنزين المتوفر حالياً : {{fuel_still}} لتر </td>
+                </tr>
+            </tbody>
+      </table>
+    <br>
+
+
+</div>
+
+{% endblock body %}

@@ -1,0 +1,300 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+
+{% endblock css %}
+
+{% block body %}
+
+<div class="p4">
+    <div class="modal fade" id="name"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <form method="post">
+            {% csrf_token %}
+            <div class="modal-dialog ">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">اضافة عملية ادخال</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        
+                        <div style="float: right;">: المبلغ</div>
+                        <div class="form-group">
+                            <input type="number" dir="rtl" placeholder="المبلغ المدفوع" required class="form-control" name="price"  style="float: right;">
+                        </div>
+
+
+                        <div style="float: right;">: الحساب</div>
+                        <div class="form-group">
+                        <select name="account" id="" dir="rtl" placeholder="الحساب التعبئة" required class="form-control"   style="float: right;">
+                            {% for item in income_accounts %}
+                              <option value="{{item.id}}">{{item.name}}</option>
+                            {% endfor %}
+                        </select>
+                        </div>
+                        
+                        <div style="float: right;">: التاريخ</div>
+                        <div class="form-group">
+                            <input type="date"required dir="rtl" class="form-control" name="date" value="{{today|date:"Y-m-d"}}"  style="float: right;">
+                        </div>
+
+                        <div style="float: right;">: ملاحظات</div>
+                        <div class="form-group">
+                            <input type="text" dir="rtl"placeholder="ملاحظات" class="form-control" name="notes"  style="float: right;">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">الغاء</button>
+                        <button type="submit" class="btn btn-primary" name="add">اضافة</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal fade" id="pr"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <form method="GET" action="{% url 'income_print' %}">
+            <div class="modal-dialog ">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">طباعة متقدمة</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        
+                        
+                        <div style="float: right;">: من تاريخ</div>
+                        <div class="form-group">
+                            <input type="date"required dir="rtl" class="form-control" name="fdate"   style="float: right;">
+                        </div>
+    
+                        <div style="float: right;">: الى تاريخ</div>
+                        <div class="form-group">
+                            <input type="date"required dir="rtl" class="form-control" name="tdate"   style="float: right;">
+                        </div>
+                        {% comment %} <div style="float: right;">: طباعة</div>
+                        <div class="form-group">
+                            <select required dir="rtl" class="form-control" name="wtprint"   style="float: right;">
+                                <option value="1" selected>جميع المصروفات</option>
+                                <option value="2">المصروفات بدون حديد</option>
+                                <option value="3">مصروفات الحديد فقط</option>
+                            </select>
+                        </div> {% endcomment %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">الغاء</button>
+                        <button type="submit" class="btn btn-primary" name="add">طباعة</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="uper">
+        <div class="models sp">
+        <h1 style="" class="hme">المدخولات النقدية</h1>
+        <div style=" font-size: x-large;"><button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#name">اضافة عملية ادخال جديدة</button></div>
+        </div>
+
+    </div>
+    <br>
+
+
+    <form  method="GET" class="models">
+        <div class="input-group  ds" style="width: 30% !important;">
+          <button class="btn btn-outline-secondary"name="dt" id="button-addon1">تصفية</button>
+          <input type="date" required class="form-control"name="data_as"  placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1"value="{{data_as}}">
+        </div>
+        <a href="{% url 'income_print' %}" class="btn btn-primary ds">طباعة</a>
+    </form>
+    <div style=" font-size: x-large;"><button type="button" class="btn btn-primary ds" data-bs-toggle="modal" data-bs-target="#pr">طباعة متقدمة</button></div>
+
+    {% if  day_income_all %}
+        <div class="models sp">
+            <h5 style="margin-top: 50px;" class="hme" >المدخولات لتاريخ {{data_as}}</h5>
+        </div>
+        <table class="table table-hover" style="width: 100%; margin-top: 0px;">
+            <thead>
+                <tr>
+                <th style="width: 20%;"><center>التاريخ</center></th>
+                <th style="width: 15%;"><center>المصدر</center></th>
+                <th style="width: 15%;"><center>المبلغ</center></th>
+                <th style="width: 10%;"><center>الرقم</center></th>
+                </tr>
+            </thead>
+            <tbody id="output1" style="width: 100%;">
+                {% for item in day_income_all %}
+                            <tr dir="rtl"> 
+                                <td style=" text-align:center; width: 20%;">{{item.date|date:"m-d"}}</td>
+                                <td style=" text-align:center; width: 15%;">{{item.account}}</td>
+                                <td style=" text-align:center; width: 15%;">{{item.price}}</td>
+                                <td style=" text-align:center; width: 10%;">{{item.id}}</td>
+                            </tr>         
+                {% endfor %}
+
+            </tbody>
+        </table>
+
+        <table class="table table-hover tp" style="margin-top: 50px;">
+
+            <tbody id="output1" style="width: 100%;">
+                <tr>
+                    <td style="width: 30%; text-align:center;">مدخولات خدمات التوزين : {{day_income_weight_gain}} شيكل </td>
+                    <td style="width: 30%; text-align:center;">مدخولات بيع الحديد : {{day_income_iron}}  </td>
+                    <td style="width: 40%; text-align:center;">مدخولات الشركة الام : {{day_income_company}} شيكل </td>
+                </tr>
+            </tbody>
+        </table>
+        <br>
+        <table class="table table-hover tp" style="margin-top: 20px;">
+
+            <tbody id="output1" style="width: 100%;">
+                <tr>
+                    <td style="width: 40%; text-align:center;">مجموع المدخولات : {{day_income_all_price}} شيكل </td>
+                </tr>
+            </tbody>
+        </table>
+
+    {% endif %}
+
+    <div class="models sp">
+        <h5 style="margin-top: 50px;" class="hme" >مدخولات الاسبوع الحالي</h5>
+    </div>
+    <table class="table table-hover" style="width: 100%; margin-top: 0px;">
+        <thead>
+            <tr>
+              <th style="width: 20%;"><center>التاريخ</center></th>
+              <th style="width: 15%;"><center>المصدر</center></th>
+              <th style="width: 15%;"><center>المبلغ</center></th>
+              <th style="width: 10%;"><center>الرقم</center></th>
+            </tr>
+          </thead>
+        <tbody id="output1" style="width: 100%;">
+            {% for item in week_income_all %}
+                        <tr dir="rtl"> 
+                            <td style=" text-align:center; width: 20%;">{{item.date|date:"m-d"}}</td>
+                            <td style=" text-align:center; width: 15%;">{{item.account}}</td>
+                            <td style=" text-align:center; width: 15%;">{{item.price}}</td>
+                            <td style=" text-align:center; width: 10%;">{{item.id}}</td>
+                        </tr>         
+            {% endfor %}
+
+        </tbody>
+    </table>
+
+    <table class="table table-hover tp" style="margin-top: 50px;">
+
+        <tbody id="output1" style="width: 100%;">
+            <tr>
+                <td style="width: 25%; text-align:center;">مدخولات خدمات التوزين : {{week_income_weight_gain}} شيكل </td>
+                <td style="width: 25%; text-align:center;">مدخولات بيع الحديد : {{week_income_iron}}  </td>
+                <td style="width: 25%; text-align:center;">مدخولات الشركة الام : {{week_income_company}} شيكل </td>
+                <td style="width: 25%; text-align:center;">مدخولات من الاسبوع السابق : {{week_income_last_week}} شيكل </td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+    <table class="table table-hover tp" style="margin-top: 20px;">
+
+        <tbody id="output1" style="width: 100%;">
+            <tr>
+                <td style="width: 30%; text-align:center;">المتبقي : {{bc}} شيكل </td>
+                <td style="width: 30%; text-align:center;">مجموع المصروفات : {{week_expenses_all_price}}  </td>
+                <td style="width: 40%; text-align:center;">مجموع المدخولات : {{week_income_all_price}} شيكل </td>
+            </tr>
+        </tbody>
+    </table>
+
+
+    <div class="models sp">
+        <h5 style="margin-top: 50px;" class="hme" >مدخولات الاسبوع السابق</h5>
+    </div>
+    <table class="table table-hover" style="width: 100%; margin-top: 0px;">
+        <thead>
+            <tr>
+              <th style="width: 20%;"><center>التاريخ</center></th>
+              <th style="width: 15%;"><center>المصدر</center></th>
+              <th style="width: 15%;"><center>المبلغ</center></th>
+              <th style="width: 10%;"><center>الرقم</center></th>
+            </tr>
+          </thead>
+        <tbody id="output1" style="width: 100%;">
+            {% for item in last_week_income_all %}
+                        <tr dir="rtl"> 
+                            <td style=" text-align:center; width: 20%;">{{item.date|date:"m-d"}}</td>
+                            <td style=" text-align:center; width: 15%;">{{item.account}}</td>
+                            <td style=" text-align:center; width: 15%;">{{item.price}}</td>
+                            <td style=" text-align:center; width: 10%;">{{item.id}}</td>
+                        </tr>         
+            {% endfor %}
+
+        </tbody>
+    </table>
+
+    <table class="table table-hover tp" style="margin-top: 50px;">
+
+        <tbody id="output1" style="width: 100%;">
+            <tr>
+                <td style="width: 25%; text-align:center;">مدخولات خدمات التوزين : {{last_week_income_weight_gain}} شيكل </td>
+                <td style="width: 25%; text-align:center;">مدخولات بيع الحديد : {{last_week_income_iron}}  </td>
+                <td style="width: 25%; text-align:center;">مدخولات الشركة الام : {{last_week_income_company}} شيكل </td>
+                <td style="width: 25%; text-align:center;">مدخولات من الاسبوع السابق : {{last_week_income_last_week}} شيكل </td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+    <table class="table table-hover tp" style="margin-top: 20px;">
+
+        <tbody id="output1" style="width: 100%;">
+            <tr>
+                <td style="width: 40%; text-align:center;">مجموع المدخولات : {{last_week_income_all_price}} شيكل </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="models sp">
+        <h5 style="margin-top: 50px;" class="hme" >مدخولات الاسابيع السابقة</h5>
+    </div>
+    <table class="table table-hover" style="width: 100%; margin-top: 0px;">
+        <thead>
+            <tr>
+              <th style="width: 20%;"><center>التاريخ</center></th>
+              <th style="width: 15%;"><center>المصدر</center></th>
+              <th style="width: 15%;"><center>المبلغ</center></th>
+              <th style="width: 10%;"><center>الرقم</center></th>
+            </tr>
+          </thead>
+        <tbody id="output1" style="width: 100%;">
+            {% for item in all_week_income_all %}
+                        <tr dir="rtl"> 
+                            <td style=" text-align:center; width: 20%;">{{item.date|date:"m-d"}}</td>
+                            <td style=" text-align:center; width: 15%;">{{item.account}}</td>
+                            <td style=" text-align:center; width: 15%;">{{item.price}}</td>
+                            <td style=" text-align:center; width: 10%;">{{item.id}}</td>
+                        </tr>         
+            {% endfor %}
+
+        </tbody>
+    </table>
+
+    <table class="table table-hover tp" style="margin-top: 50px;">
+
+        <tbody id="output1" style="width: 100%;">
+            <tr>
+                <td style="width: 30%; text-align:center;">مدخولات خدمات التوزين : {{all_week_income_weight_gain}} شيكل </td>
+                <td style="width: 30%; text-align:center;">مدخولات بيع الحديد : {{all_week_income_iron}}  </td>
+                <td style="width: 40%; text-align:center;">مدخولات الشركة الام : {{all_week_income_company}} شيكل </td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+    <table class="table table-hover tp" style="margin-top: 20px;">
+
+        <tbody id="output1" style="width: 100%;">
+            <tr>
+                <td style="width: 40%; text-align:center;">مجموع المدخولات : {{all_week_income_all_price}} شيكل </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+{% endblock body %}

@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+
+{% endblock css %}
+
+{% block body %}
+<div class="p4">
+
+    <div class="uper">
+        <div class="models sp">
+        <h1 style="" class="hme">عملية بيع حديد رقم {{iron_sales_child.id}}</h1>
+        </div>
+
+    </div>
+    <br>
+
+
+    <table class="table table-hover" style="width: 100%; margin-top: 50px;">
+        <thead>
+            <tr>
+              {% comment %} <th style="width: 20%;"><center>ملاحظات</center></th> {% endcomment %}
+              <th style="width: 20%;"><center>التاريخ</center></th>
+              <th style="width: 15%;"><center>المبلغ</center></th>
+              <th style="width: 15%;"><center>التسعير</center></th>
+              <th style="width: 15%;"><center> الكمية</center></th>
+              <th style="width: 10%;"><center>الرقم</center></th>
+
+
+
+            </tr>
+          </thead>
+        <tbody id="output1" style="width: 100%;">
+  
+                            <tr dir="rtl"> 
+                            {% comment %} <td style=" text-align:center;width: 20%;">{{notes}}</td> {% endcomment %}
+                            <td style=" text-align:center; width: 20%;">{{iron_sales_child.date|date:"m-d"}}</td>
+                            <td style=" text-align:center; width: 15%;">{{iron_sales_child.price}}</td>
+                            <td style=" text-align:center; width: 15%;">{{iron_sales_child.pricing}}</td>
+                            <td style=" text-align:center; width: 15%;">{{iron_sales_child.quantity}}</td>
+                            <td style=" text-align:center; width: 10%;">{{iron_sales_child.id}}</td>
+                            </tr>      
+      
+        </tbody>
+      </table>
+
+    <br>
+
+
+</div>
+
+{% endblock body %}
