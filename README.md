@@ -83,5 +83,10 @@ A report that displays all the movements of production expenses since the beginn
 ## Techniques to mention :
  - ### Filtration technology throughout date :
  Most pages have a section where two dates can be placed to display only the operations that took place between them.
+ 
+ ![التقاط الويب_28-4-2023_221411_127 0 0 1](https://user-images.githubusercontent.com/90055804/235244918-5b193689-40ea-4621-8ed3-1e87fc40ffa0.jpeg)
+![التقاط الويب_28-4-2023_221426_127 0 0 1](https://user-images.githubusercontent.com/90055804/235244932-d3b9fe59-6d5a-4580-ada9-2f4ce1d5229b.jpeg)
+
+ 
  - ### Determine the beginning of the week automatically and perform operations automatically :
 On most pages, the operations of the week are displayed in a table, then the operations of the previous week in a table, then the rest of the operations in a table. The weekly report is also generated automatically without intervention to specify the operations included in the week. All of this happens automatically.
